@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import Avatar from '@material-ui/core/Avatar'
@@ -8,8 +8,27 @@ import MoreVert from '@material-ui/icons/MoreVert'
 import Search from '@material-ui/icons/Search'
 import picSrc from '../Functions/picSrcGenerator'
 import SideBarChat from '../SidebarChat/SidebarChat'
+import { db } from '../../firebase'
 
 const Sidebar = () => {
+    const [chats, setChats] = useState([])
+
+    useEffect(() => {
+        const unsucscribe = db.collection('chats').onSnapshot((snapshot) =>
+            setChats(
+                snapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    data: doc.data(),
+                }))
+            )
+        )
+
+        return () => {
+            unsucscribe()
+        }
+    }, [])
+
+    console.log(chats)
     return (
         <SideBarWrapper>
             <SideBarHeader>
@@ -34,9 +53,9 @@ const Sidebar = () => {
             </SideBarSearch>
             <SideBarChats>
                 <SideBarChat addNewChat />
-                <SideBarChat />
-                <SideBarChat />
-                <SideBarChat />
+                {chats.map((chat) => (
+                    <SideBarChat key={chat.id} id={chat.id} chatName={chat.data.name} />
+                ))}
             </SideBarChats>
         </SideBarWrapper>
     )

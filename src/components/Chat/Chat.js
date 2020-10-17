@@ -1,32 +1,58 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
-import Avatar from '@material-ui/core/Avatar'
-import Search from '@material-ui/icons/Search'
-import MoreVert from '@material-ui/icons/MoreVert'
-
-import picSrc from '../Functions/picSrcGenerator'
+import InsertEmoticon from '@material-ui/icons/InsertEmoticon'
+import AttachFile from '@material-ui/icons/AttachFile'
+import Mic from '@material-ui/icons/Mic'
+import Send from '@material-ui/icons/Send'
+import ChatHeader from './ChatHeader/ChatHeader'
 
 const Chat = () => {
+    const [isTyping, setIsTyping] = useState(false)
+    const [inputMessageValue, setInputMessageValue] = useState('')
+    const sendButton = isTyping ? <SendIcon /> : <MicIcon />
+
+    useEffect(() => {
+        console.log('ChatBody render')
+    }, [])
+
+    const onChangeHandler = (event) => {
+        setInputMessageValue(event.target.value)
+        noRenders(event)
+    }
+
+    const noRenders = useCallback((event) => {
+        if (event.target.value.length === 0) {
+            setIsTyping(false)
+        } else {
+            setIsTyping(true)
+        }
+    }, [])
+
+    const sendMessage = (event) => {
+        event.preventDefault()
+        console.log(`You just typed >> ${inputMessageValue}`)
+        //Clear Message Input at the end
+        setInputMessageValue('')
+    }
+
     return (
         <ChatWrapper>
-            <ChatHeader>
-                <Avatar src={picSrc()} />
-                <ChatHeaderInfo>
-                    <h3>Room Name</h3>
-                    <p>Last seen at..</p>
-                </ChatHeaderInfo>
-                <CharHeaderRight>
-                    <IconButton>
-                        <MoreVertIcon />
-                    </IconButton>
-                    <IconButton>
-                        <SearchIcon></SearchIcon>
-                    </IconButton>
-                </CharHeaderRight>
-            </ChatHeader>
+            <ChatHeader />
             <ChatBody></ChatBody>
-            <ChatFooter></ChatFooter>
+            <ChatFooter>
+                <IconButton>
+                    <InsertEmoticonIcon />
+                </IconButton>
+                <IconButton>
+                    <AttachFileIcon />
+                </IconButton>
+                <ChatFooterForm>
+                    <ChatFooterMessageInput value={inputMessageValue} placeholder="Type a message" type="text" onChange={onChangeHandler} />
+                    <ChatFooterFormButton type="submit" onClick={sendMessage} />
+                </ChatFooterForm>
+                <IconButton>{sendButton}</IconButton>
+            </ChatFooter>
         </ChatWrapper>
     )
 }
@@ -35,33 +61,58 @@ export default Chat
 
 const ChatWrapper = styled.div`
     flex: 0.75;
-`
-
-const ChatHeader = styled.div`
     display: flex;
-    padding: 20px;
-    align-items: center;
-    border-bottom: 1px solid lightgray;
+    flex-direction: column;
 `
-const ChatHeaderInfo = styled.div`
+const ChatBody = styled.div`
     flex: 1;
-    padding-left: 20px;
-
-    & > h3 {
-        margin-bottom: 3px;
-        font-weight: 500;
-    }
-    & > p {
-        color: gray;
-    }
+    background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+    background-repeat: repeat;
+    background-position: center;
+    padding: 30px;
+    overflow: hidden;
 `
-const CharHeaderRight = styled.div`
+const ChatFooter = styled.div`
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    min-width: 100px;
+    height: 62px;
 `
+const InsertEmoticonIcon = styled(InsertEmoticon)``
+const AttachFileIcon = styled(AttachFile)`
+    transform: rotate(315deg);
+`
+const MicIcon = styled(Mic)``
+const SendIcon = styled(Send)``
+const ChatFooterForm = styled.form`
+    flex: 1;
+    display: flex;
+`
+const ChatFooterFormButton = styled.button`
+    display: none;
+`
+const ChatFooterMessageInput = styled.input`
+    flex: 1;
+    border-radius: 30px;
+    padding: 13.5px;
+    border: none;
+    outline: none;
+    color: rgba(0, 0, 0, 0.6);
 
-const ChatBody = styled.div``
-const ChatFooter = styled.div``
-const SearchIcon = styled(Search)``
-const MoreVertIcon = styled(MoreVert)``
+    //PlaceHolder support all browsers
+    &::-webkit-input-placeholder {
+        color: darkgray;
+    }
+
+    &::-moz-placeholder {
+        color: lightgray;
+    }
+
+    &::-ms-placeholder {
+        color: lightgray;
+    }
+
+    &::placeholder {
+        color: darkgray;
+    }
+`

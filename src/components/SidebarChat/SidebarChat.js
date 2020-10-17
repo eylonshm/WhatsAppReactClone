@@ -3,14 +3,14 @@ import styled from 'styled-components'
 import Avatar from '@material-ui/core/Avatar'
 import picSrc from '../Functions/picSrcGenerator'
 
-const SidebarChat = ({ addNewChat }) => {
+const SidebarChat = ({ id, chatName, addNewChat }) => {
     const createNewChat = () => {}
 
     return !addNewChat ? (
         <SideBarChatWrapper>
             <Avatar src={picSrc()} />
             <SideBarChatInfo>
-                <h2 id="Kid">Chat Name</h2>
+                <h2>{chatName}</h2>
                 <p>Last Message</p>
             </SideBarChatInfo>
         </SideBarChatWrapper>
