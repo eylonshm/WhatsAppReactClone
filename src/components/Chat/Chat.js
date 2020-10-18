@@ -60,7 +60,8 @@ const Chat = (props) => {
         <ChatWrapper>
             <ChatHeader />
             <ChatBody>
-                <Message />
+                <Message messageOwnerID={'9ajKT1QSWrfXT0Epfk96bJuk7CB3'} />
+                <Message messageOwnerID={'9ajKT1QSWrfXT0Epfk96bJuk7CB3d'} />
             </ChatBody>
             <ChatFooter>
                 <IconButton>
