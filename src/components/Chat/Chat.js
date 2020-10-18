@@ -6,8 +6,11 @@ import AttachFile from '@material-ui/icons/AttachFile'
 import Mic from '@material-ui/icons/Mic'
 import Send from '@material-ui/icons/Send'
 import ChatHeader from './ChatHeader/ChatHeader'
+import Message from '../Message/Message'
+import { connect } from 'react-redux'
+import { db } from '../../firebase'
 
-const Chat = () => {
+const Chat = (props) => {
     const [isTyping, setIsTyping] = useState(false)
     const [inputMessageValue, setInputMessageValue] = useState('')
     const sendButton = isTyping ? <SendIcon /> : <MicIcon />
@@ -32,14 +35,33 @@ const Chat = () => {
     const sendMessage = (event) => {
         event.preventDefault()
         console.log(`You just typed >> ${inputMessageValue}`)
+        //Create The message
+        const message = {
+            messageContent: inputMessageValue,
+            authorID: props.userUID,
+            timeStamp: Date.now(),
+        }
         //Clear Message Input at the end
         setInputMessageValue('')
+        //Post message to FireBase/CurrentChatID/messages
+        const unsucsribe = db.collection('chats').doc(props.currentChatID).collection('messages').add(message)
+        return () => {
+            unsucsribe()
+        }
+        // firebase
+        //     .database()
+        //     .ref('chats/' + props.currentChatID)
+        //     .set({
+        //         something: 'dsa',
+        //     })
     }
 
     return (
         <ChatWrapper>
             <ChatHeader />
-            <ChatBody></ChatBody>
+            <ChatBody>
+                <Message />
+            </ChatBody>
             <ChatFooter>
                 <IconButton>
                     <InsertEmoticonIcon />
@@ -57,7 +79,14 @@ const Chat = () => {
     )
 }
 
-export default Chat
+const mapStateToProps = (state) => {
+    return {
+        userUID: state.auth.user.uid,
+        currentChatID: state.chats.currentChatID,
+    }
+}
+
+export default connect(mapStateToProps)(Chat)
 
 const ChatWrapper = styled.div`
     flex: 0.75;

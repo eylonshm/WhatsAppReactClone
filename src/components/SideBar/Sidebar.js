@@ -6,11 +6,12 @@ import DonutLarge from '@material-ui/icons/DonutLarge'
 import Chat from '@material-ui/icons/Chat'
 import MoreVert from '@material-ui/icons/MoreVert'
 import Search from '@material-ui/icons/Search'
-import picSrc from '../Functions/picSrcGenerator'
+import { connect } from 'react-redux'
 import SideBarChat from '../SidebarChat/SidebarChat'
 import { db } from '../../firebase'
+// import * as actions from '../../store/actions/index'
 
-const Sidebar = () => {
+const Sidebar = (props) => {
     const [chats, setChats] = useState([])
 
     useEffect(() => {
@@ -32,7 +33,7 @@ const Sidebar = () => {
     return (
         <SideBarWrapper>
             <SideBarHeader>
-                <Avatar src={picSrc()} />
+                <Avatar src={props.user?.photoURL} />
                 <SideBarHeaderRight>
                     <IconButton>
                         <DonutLargeIcon />
@@ -61,7 +62,19 @@ const Sidebar = () => {
     )
 }
 
-export default Sidebar
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         onSetCurrentChat: (chatID) => dispatch(actions.setCurrentChat(chatID)),
+//     }
+// }
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.auth.user,
+    }
+}
+
+export default connect(mapStateToProps)(Sidebar)
 
 const SideBarWrapper = styled.div`
     display: flex;

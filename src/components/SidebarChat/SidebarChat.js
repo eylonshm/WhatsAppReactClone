@@ -2,12 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 import Avatar from '@material-ui/core/Avatar'
 import picSrc from '../Functions/picSrcGenerator'
+import { connect } from 'react-redux'
+import * as actions from '../../store/actions/index'
 
-const SidebarChat = ({ id, chatName, addNewChat }) => {
+const SidebarChat = ({ id, chatName, addNewChat, onSetCurrentChat }) => {
     const createNewChat = () => {}
 
     return !addNewChat ? (
-        <SideBarChatWrapper>
+        <SideBarChatWrapper onClick={() => onSetCurrentChat(id)}>
             <Avatar src={picSrc()} />
             <SideBarChatInfo>
                 <h2>{chatName}</h2>
@@ -20,8 +22,13 @@ const SidebarChat = ({ id, chatName, addNewChat }) => {
         </SideBarChatWrapper>
     )
 }
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onSetCurrentChat: (chatID) => dispatch(actions.setCurrentChat(chatID)),
+    }
+}
 
-export default SidebarChat
+export default connect(null, mapDispatchToProps)(SidebarChat)
 
 const SideBarChatWrapper = styled.div`
     display: flex;

@@ -2,15 +2,17 @@ import React from 'react'
 import styled from 'styled-components'
 import Btn from '@material-ui/core/Button'
 import { auth, provider } from '../../firebase'
+import { connect } from 'react-redux'
+import * as actions from '../../store/actions/index'
 
-const Login = () => {
+const Login = (props) => {
     const signIn = () => {
         auth.signInWithPopup(provider)
             .then((result) => {
-                console.log(result)
+                props.onSetUser(result.user)
             })
             .catch((err) => {
-                alert(err.message)
+                console.log(err.message)
             })
     }
     return (
@@ -26,7 +28,13 @@ const Login = () => {
     )
 }
 
-export default Login
+const mapDispathToProps = (dispatch) => {
+    return {
+        onSetUser: (user) => dispatch(actions.setUser(user)),
+    }
+}
+
+export default connect(null, mapDispathToProps)(Login)
 
 const LoginWrapper = styled.div`
     background-color: #f8f8f8;

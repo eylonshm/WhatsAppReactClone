@@ -1,0 +1,8 @@
+import * as actionTypes from './actionsTypes'
+
+export const setUser = (user) => {
+    return {
+        type: actionTypes.SET_USER,
+        user: user,
+    }
+}

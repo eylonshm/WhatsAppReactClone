@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './App.css'
 import SideBar from './components/SideBar/Sidebar'
 import Chat from './components/Chat/Chat'
 import Login from './components/Login/Login'
+import { connect } from 'react-redux'
 
-function App() {
-    const [user, setUser] = useState(null)
+function App(props) {
     return (
+        //Add ! before props.user to allow Login Auth
         <div className="app">
-            {!user ? (
+            {!props.user ? (
                 <Login />
             ) : (
                 <div className="app__body">
@@ -20,4 +21,10 @@ function App() {
     )
 }
 
-export default App
+const mapStateToProps = (state) => {
+    return {
+        user: state.auth.user,
+    }
+}
+
+export default connect(mapStateToProps)(App)
