@@ -35,6 +35,7 @@ export default connect(mapStateToProps)(Message)
 const MessageWrapper = styled.div`
     display: flex;
     justify-content: space-between;
+    margin-bottom: 4px;
     width: fit-content;
     min-width: 150px;
     max-width: 550px;
@@ -45,7 +46,7 @@ const MessageWrapper = styled.div`
     word-wrap: break-word;
     box-shadow: 0px 1px 3px -2.5px black;
     background-color: ${(props) => (props.isMessageOwner ? '#DCF8C6' : 'white')};
-    float: ${(props) => (props.isMessageOwner ? 'right' : 'left')};
+    align-self: ${(props) => (props.isMessageOwner ? 'flex-end' : 'flex-start')};
 `
 const MessageContent = styled.span`
     align-self: center;

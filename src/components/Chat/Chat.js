@@ -96,6 +96,8 @@ const ChatWrapper = styled.div`
 `
 const ChatBody = styled.div`
     flex: 1;
+    display: flex;
+    flex-direction: column;
     background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
     background-repeat: repeat;
     background-position: center;
