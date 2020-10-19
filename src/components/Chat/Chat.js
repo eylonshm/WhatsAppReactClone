@@ -20,23 +20,22 @@ const Chat = (props) => {
     useEffect(() => {
         console.log('ChatBody render')
         const unsubscribe = db
-        .collection('chats')
-        .doc(props.currentChatID)
-        .collection('messages')
-        .onSnapshot(snapshot => {
-            setchatMessages(
-                snapshot.docs.map(msg => ({
-                    authorID: msg.data().authorID,
-                    messageContent: msg.data().messageContent,
-                    timeStamp: msg.data().timeStamp
-
-                }))
-            )
-        })
+            .collection('chats')
+            .doc(props.currentChatID)
+            .collection('messages')
+            .onSnapshot((snapshot) => {
+                setchatMessages(
+                    snapshot.docs.map((msg) => ({
+                        authorID: msg.data().authorID,
+                        messageContent: msg.data().messageContent,
+                        timeStamp: msg.data().timeStamp,
+                    }))
+                )
+            })
         return () => {
             unsubscribe()
         }
-    }, [])
+    }, [props.currentChatID])
 
     const onChangeHandler = (event) => {
         setInputMessageValue(event.target.value)
@@ -73,8 +72,8 @@ const Chat = (props) => {
         <ChatWrapper>
             <ChatHeader />
             <ChatBody>
-                {chatMessages.map(msg => (
-                    <Message messageOwnerID={msg.authorID} messageContent={msg.messageContent} messageTimestamp={msg.timeStamp}/>
+                {chatMessages.map((msg) => (
+                    <Message messageOwnerID={msg.authorID} messageContent={msg.messageContent} messageTimestamp={msg.timeStamp} />
                 ))}
             </ChatBody>
             <ChatFooter>
