@@ -18,7 +18,7 @@ const Message = (props) => {
     }, [])
     return (
         <MessageWrapper isMessageOwner={isMessageOwner}>
-            <MessageContent>Hey Sup</MessageContent>
+            <MessageContent>{props.messageContent}</MessageContent>
             <TimeStamp>22:55</TimeStamp>
         </MessageWrapper>
     )

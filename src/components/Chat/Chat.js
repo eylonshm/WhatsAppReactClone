@@ -13,10 +13,29 @@ import { db } from '../../firebase'
 const Chat = (props) => {
     const [isTyping, setIsTyping] = useState(false)
     const [inputMessageValue, setInputMessageValue] = useState('')
+    const [chatMessages, setchatMessages] = useState([])
+
     const sendButton = isTyping ? <SendIcon /> : <MicIcon />
 
     useEffect(() => {
         console.log('ChatBody render')
+        const unsubscribe = db
+        .collection('chats')
+        .doc(props.currentChatID)
+        .collection('messages')
+        .onSnapshot(snapshot => {
+            setchatMessages(
+                snapshot.docs.map(msg => ({
+                    authorID: msg.data().authorID,
+                    messageContent: msg.data().messageContent,
+                    timeStamp: msg.data().timeStamp
+
+                }))
+            )
+        })
+        return () => {
+            unsubscribe()
+        }
     }, [])
 
     const onChangeHandler = (event) => {
@@ -48,20 +67,15 @@ const Chat = (props) => {
         return () => {
             unsucsribe()
         }
-        // firebase
-        //     .database()
-        //     .ref('chats/' + props.currentChatID)
-        //     .set({
-        //         something: 'dsa',
-        //     })
     }
 
     return (
         <ChatWrapper>
             <ChatHeader />
             <ChatBody>
-                <Message messageOwnerID={'9ajKT1QSWrfXT0Epfk96bJuk7CB3'} />
-                <Message messageOwnerID={'9ajKT1QSWrfXT0Epfk96bJuk7CB3d'} />
+                {chatMessages.map(msg => (
+                    <Message messageOwnerID={msg.authorID} messageContent={msg.messageContent} messageTimestamp={msg.timeStamp}/>
+                ))}
             </ChatBody>
             <ChatFooter>
                 <IconButton>
