@@ -37,7 +37,7 @@ const MessageWrapper = styled.div`
     justify-content: space-between;
     margin-bottom: 4px;
     width: fit-content;
-    min-width: 150px;
+    min-width: 100px;
     max-width: 550px;
     min-height: fit-content;
     min-height: 30px;
@@ -51,12 +51,12 @@ const MessageWrapper = styled.div`
 const MessageContent = styled.span`
     align-self: center;
     margin-left: 8px;
-    maegin-right: 20px;
+    maegin-right: 12px;
     padding: 5px;
 `
 const TimeStamp = styled.span`
     align-self: flex-end;
-    padding: 0px 6px 2px 0px;
+    padding: 0px 6px 2px 20px;
     font-size: 11px;
     color: #8c8c8c;
 `
