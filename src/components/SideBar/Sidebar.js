@@ -15,7 +15,7 @@ const Sidebar = (props) => {
     const [chats, setChats] = useState([])
 
     useEffect(() => {
-        const unsucscribe = db.collection('chats').onSnapshot((snapshot) =>
+        const unsubscribe = db.collection('chats').onSnapshot((snapshot) =>
             setChats(
                 snapshot.docs.map((doc) => ({
                     id: doc.id,
@@ -25,7 +25,7 @@ const Sidebar = (props) => {
         )
 
         return () => {
-            unsucscribe()
+            unsubscribe()
         }
     }, [])
 
