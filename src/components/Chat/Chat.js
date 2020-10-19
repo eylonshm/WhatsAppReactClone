@@ -23,6 +23,7 @@ const Chat = (props) => {
             .collection('chats')
             .doc(props.currentChatID)
             .collection('messages')
+            .orderBy('timeStamp', 'asc')
             .onSnapshot((snapshot) => {
                 setchatMessages(
                     snapshot.docs.map((msg) => ({
