@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 const Message = (props) => {
     const [isMessageOwner, setMessageOwner] = useState()
-
+    const [timeStamp, setTimeStamp] = useState()
     useEffect(() => {
         let fds
         if (props.currentUserID === props.messageOwnerID) {
@@ -16,10 +16,21 @@ const Message = (props) => {
         }
         console.log(`Am i the owner: ${fds}`)
     }, [])
+
+    useEffect(() => {
+        var date = new Date(parseInt(props.messageTimestamp))
+        setTimeStamp(
+            date.toLocaleTimeString(navigator.language, {
+                hour: '2-digit',
+                minute: '2-digit',
+            })
+        )
+    }, [])
+
     return (
         <MessageWrapper isMessageOwner={isMessageOwner}>
             <MessageContent>{props.messageContent}</MessageContent>
-            <TimeStamp>22:55</TimeStamp>
+            <TimeStamp>{timeStamp}</TimeStamp>
         </MessageWrapper>
     )
 }
