@@ -109,6 +109,8 @@ const ChatWrapper = styled.div`
     flex-direction: column;
 `
 const ChatBody = styled.div`
+    max-width: 100%;
+    overflow-x: hidden;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -116,7 +118,24 @@ const ChatBody = styled.div`
     background-repeat: repeat;
     background-position: center;
     padding: 30px;
-    overflow: hidden;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+        opacity: 0.2;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+        opacity: 0.2;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: rgb(245, 245, 245);
+        opacity: 0.4;
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+        opacity: 0.2;
+    }
 `
 const ChatFooter = styled.div`
     display: flex;

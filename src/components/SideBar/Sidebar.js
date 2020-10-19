@@ -111,7 +111,25 @@ const SideBarSearchContainer = styled.div`
 const SideBarChats = styled.div`
     background-color: white;
     flex: 1;
-    overflow: hiden;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+        width: 4px;
+        opacity: 0.2;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+        opacity: 0.2;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: rgb(245, 245, 245);
+        opacity: 0.4;
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+        opacity: 0.2;
+    }
+
     // Scroll without ScrollBar
     // overflow: scroll;
     // ::-webkit-scrollbar {
