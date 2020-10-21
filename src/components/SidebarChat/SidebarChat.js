@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, {useState, useEffect} from 'react'
 import styled from 'styled-components'
 import Avatar from '@material-ui/core/Avatar'
 import picSrc from '../Functions/picSrcGenerator'
@@ -6,25 +6,28 @@ import { connect } from 'react-redux'
 import * as actions from '../../store/actions/index'
 import { db } from '../../firebase'
 
+
 const SidebarChat = ({ id, chatName, addNewChat, onSetCurrentChat }) => {
+    const [lastMessage, setLastMessage] = useState()
     const createNewChat = () => {}
-    const [lastMessage, setLastMessage] = useState({})
 
     useEffect(() => {
-        console.log('this is id:')
-        console.log(`${id} `)
+        console.log(`This is the chat id ===> ${id}`)
         const unsubscribe = db
             .collection('chats')
-            .doc(`${id} `)
+            .doc(`${id}`)
             .collection('messages')
-            .orderBy('timeStamp', 'asc')
+            .orderBy('timeStamp', 'desc')
             .limit(1)
             .onSnapshot((snapshot) => {
                 setLastMessage(
                     snapshot.docs.map((msg) => ({
                         authorID: msg.data().authorID,
                         messageContent: msg.data().messageContent,
-                        timeStamp: msg.data().timeStamp,
+                        timeStamp : new Date(parseInt(msg.data().timeStamp)).toLocaleTimeString(navigator.language, {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                        })
                     }))
                 )
             })
@@ -38,10 +41,10 @@ const SidebarChat = ({ id, chatName, addNewChat, onSetCurrentChat }) => {
             <Avatar src={picSrc()} />
             <SideBarLeft>
                 <h2>{chatName}</h2>
-                <p>Last Message</p>
+                <p>{lastMessage ? `${lastMessage[0].messageContent}` : ''}</p>
             </SideBarLeft>
             <SideBarRight>
-                <p>22:25</p>
+                <p>{lastMessage ? `${lastMessage[0].timeStamp}` : ''}</p>
             </SideBarRight>
         </SideBarChatWrapper>
     ) : (
