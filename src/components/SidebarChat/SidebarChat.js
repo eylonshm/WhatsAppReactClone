@@ -1,20 +1,48 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Avatar from '@material-ui/core/Avatar'
 import picSrc from '../Functions/picSrcGenerator'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/index'
+import { db } from '../../firebase'
 
 const SidebarChat = ({ id, chatName, addNewChat, onSetCurrentChat }) => {
     const createNewChat = () => {}
+    const [lastMessage, setLastMessage] = useState({})
+
+    useEffect(() => {
+        console.log('this is id:')
+        console.log(`${id} `)
+        const unsubscribe = db
+            .collection('chats')
+            .doc(`${id} `)
+            .collection('messages')
+            .orderBy('timeStamp', 'asc')
+            .limit(1)
+            .onSnapshot((snapshot) => {
+                setLastMessage(
+                    snapshot.docs.map((msg) => ({
+                        authorID: msg.data().authorID,
+                        messageContent: msg.data().messageContent,
+                        timeStamp: msg.data().timeStamp,
+                    }))
+                )
+            })
+        return () => {
+            unsubscribe()
+        }
+    }, [])
 
     return !addNewChat ? (
         <SideBarChatWrapper onClick={() => onSetCurrentChat(id)}>
             <Avatar src={picSrc()} />
-            <SideBarChatInfo>
+            <SideBarLeft>
                 <h2>{chatName}</h2>
                 <p>Last Message</p>
-            </SideBarChatInfo>
+            </SideBarLeft>
+            <SideBarRight>
+                <p>22:25</p>
+            </SideBarRight>
         </SideBarChatWrapper>
     ) : (
         <SideBarChatWrapper onClick={createNewChat}>
@@ -40,10 +68,19 @@ const SideBarChatWrapper = styled.div`
         background-color: #ebebeb;
     }
 `
-const SideBarChatInfo = styled.div`
+const SideBarLeft = styled.div`
     margin-left: 15px;
     & > h2 {
         font-size: 16px;
         margin-bottom: 8px;
     }
+    & > p {
+        color: rgba(0, 0, 0, 0.6);
+    }
+`
+const SideBarRight = styled.div`
+    padding: 0 5px;
+    margin-left: auto;
+    color: rgb(160, 160, 160);
+    font-size: 13.5px;
 `

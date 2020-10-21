@@ -29,7 +29,6 @@ const Sidebar = (props) => {
         }
     }, [])
 
-    console.log(chats)
     return (
         <SideBarWrapper>
             <SideBarHeader>

@@ -6,15 +6,15 @@ const Message = (props) => {
     const [isMessageOwner, setMessageOwner] = useState()
     const [timeStamp, setTimeStamp] = useState()
     useEffect(() => {
-        let fds
+        // let fds
         if (props.currentUserID === props.messageOwnerID) {
             setMessageOwner(true)
-            fds = 'true'
+            // fds = 'true'
         } else {
             setMessageOwner(false)
-            fds = 'false'
+            // fds = 'false'
         }
-        console.log(`Am i the owner: ${fds}`)
+        // console.log(`Am i the owner: ${fds}`)
     }, [])
 
     useEffect(() => {
