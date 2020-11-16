@@ -13,6 +13,7 @@ import { db } from '../../firebase'
 
 const Sidebar = (props) => {
     const [chats, setChats] = useState([])
+    const [searchInput, setSearchInput] = useState('')
 
     useEffect(() => {
         const unsubscribe = db.collection('chats').onSnapshot((snapshot) =>
@@ -28,6 +29,10 @@ const Sidebar = (props) => {
             unsubscribe()
         }
     }, [])
+
+    const searchHandler = (event) => {
+        setSearchInput(event.target.value)
+    }
 
     return (
         <SideBarWrapper>
@@ -48,14 +53,16 @@ const Sidebar = (props) => {
             <SideBarSearch>
                 <SideBarSearchContainer>
                     <SearchIcon />
-                    <SideBarSearchInput placeholder="Search or start new chat" />
+                    <SideBarSearchInput placeholder="Search or start new chat" value={searchInput} onChange={(event) => searchHandler(event)} />
                 </SideBarSearchContainer>
             </SideBarSearch>
             <SideBarChats>
                 <SideBarChat addNewChat />
-                {chats.map((chat) => (
-                    <SideBarChat key={chat.id} id={chat.id} chatName={chat.data.name} />
-                ))}
+                {chats.map((chat) => {
+                    if (chat.data.name.toLowerCase().includes(searchInput.toLowerCase())) {
+                        return <SideBarChat key={chat.id} id={chat.id} chatName={chat.data.name} />
+                    }
+                })}
             </SideBarChats>
         </SideBarWrapper>
     )
@@ -153,4 +160,6 @@ const SearchIcon = styled(Search)`
 const SideBarSearchInput = styled.input`
     border: none;
     margin-left: 10px;
+    border: none;
+    outline: none;
 `
