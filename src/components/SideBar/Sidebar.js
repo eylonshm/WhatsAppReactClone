@@ -6,6 +6,7 @@ import DonutLarge from '@material-ui/icons/DonutLarge'
 import Chat from '@material-ui/icons/Chat'
 import MoreVert from '@material-ui/icons/MoreVert'
 import Search from '@material-ui/icons/Search'
+import ArrowBack from '@material-ui/icons/ArrowBack'
 import { connect } from 'react-redux'
 import SideBarChat from '../SidebarChat/SidebarChat'
 import { db } from '../../firebase'
@@ -14,6 +15,7 @@ import { db } from '../../firebase'
 const Sidebar = (props) => {
     const [chats, setChats] = useState([])
     const [searchInput, setSearchInput] = useState('')
+    const [searchIcon, setSearchIcon] = useState(true)
 
     useEffect(() => {
         const unsubscribe = db.collection('chats').onSnapshot((snapshot) =>
@@ -34,6 +36,11 @@ const Sidebar = (props) => {
         setSearchInput(event.target.value)
     }
 
+    const inputClickHandler = () => {
+        console.log('Search Icon:' + searchIcon)
+        setSearchIcon(!searchIcon)
+    }
+
     return (
         <SideBarWrapper>
             <SideBarHeader>
@@ -52,8 +59,14 @@ const Sidebar = (props) => {
             </SideBarHeader>
             <SideBarSearch>
                 <SideBarSearchContainer>
-                    <SearchIcon />
-                    <SideBarSearchInput placeholder="Search or start new chat" value={searchInput} onChange={(event) => searchHandler(event)} />
+                    {searchIcon ? <SearchIcon /> : <ArrowBackIcon />}
+                    <SideBarSearchInput
+                        placeholder="Search or start new chat"
+                        value={searchInput}
+                        onChange={(event) => searchHandler(event)}
+                        onBlur={inputClickHandler}
+                        onFocus={inputClickHandler}
+                    />
                 </SideBarSearchContainer>
             </SideBarSearch>
             <SideBarChats>
@@ -156,6 +169,13 @@ const MoreVertIcon = styled(MoreVert)`
 const SearchIcon = styled(Search)`
     color: gray;
     padding: 10px;
+`
+const ArrowBackIcon = styled(ArrowBack)`
+    color: #3fbaf4;
+    padding: 10px;
+    &::-webkit-transition: -webkit-transform 1s;
+    &::-webkit-transform: rotate(40deg);
+  
 `
 const SideBarSearchInput = styled.input`
     border: none;
