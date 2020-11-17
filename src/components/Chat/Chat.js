@@ -7,6 +7,7 @@ import Mic from '@material-ui/icons/Mic'
 import Send from '@material-ui/icons/Send'
 import ChatHeader from './ChatHeader/ChatHeader'
 import Message from '../Message/Message'
+import DateTag from '../DateTag/DateTag'
 import { connect } from 'react-redux'
 import { db } from '../../firebase'
 
@@ -73,6 +74,7 @@ const Chat = (props) => {
         <ChatWrapper>
             <ChatHeader />
             <ChatBody>
+                <DateTag />
                 {chatMessages.map((msg) => (
                     <Message messageOwnerID={msg.authorID} messageContent={msg.messageContent} messageTimestamp={msg.timeStamp} />
                 ))}
